@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.captainhumza.fyp_version3.LoginActivity">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:weightSum="100"
+        android:orientation="vertical"
+        android:background="@drawable/bg">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="25"
+            android:layout_marginTop="70dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:src="@drawable/logo"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10">
+
+            <TextView
+                android:id="@+id/sign_up_welcome_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WELCOME TO"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:textStyle="italic"
+                android:layout_centerHorizontal="true"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ONLINE STORE"
+                android:textStyle="italic"
+                android:textColor="#fff"
+                android:textSize="15dp"
+                android:layout_below="@id/sign_up_welcome_text"
+                android:layout_centerHorizontal="true"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="20">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:weightSum="100"
+                android:orientation="vertical">
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:layout_marginBottom="10dp">
+                    <EditText
+                        android:id="@+id/sign_in_email"
+                        android:layout_width="250dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:hint="Email"
+                        android:textStyle="italic"
+                        android:paddingLeft="15dp"
+                        android:textSize="13dp"
+                        android:background="#fff"
+                        android:inputType="textEmailAddress"
+                        />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="50"
+                    android:layout_marginBottom="10dp">
+                    <EditText
+                        android:id="@+id/sign_in_password"
+                        android:layout_width="250dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:hint="Password"
+                        android:textStyle="italic"
+                        android:paddingLeft="15dp"
+                        android:textSize="13dp"
+                        android:background="#fff"
+                        android:password="true"
+                        />
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:id="@+id/login_login_btn"
+                android:layout_width="300dp"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:onClick="LoginButton"
+                android:background="#41B3E9">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LOGIN "
+                    android:textStyle="italic"
+                    android:textColor="#fff"
+                    android:textSize="18dp"
+                    android:layout_centerInParent="true"/>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Forget Password?"
+                android:textSize="13dp"
+                android:textStyle="bold"
+                android:textColor="#fff"
+                />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>

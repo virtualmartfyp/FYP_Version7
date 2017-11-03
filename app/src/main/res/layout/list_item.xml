@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:clickable="true"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="55dp"
+    android:background="@color/white"
+
+    >
+
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_action_name"/>
+    <RelativeLayout
+        android:layout_width="60dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginLeft="10dp"
+        android:background="@color/white"
+        >
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/thumbnailSubProduct"
+            android:layout_width="55dp"
+            android:layout_height="45dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            />
+
+        <ImageView
+            android:id="@+id/mainSlot_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:src="@drawable/rectangle_for_sub_product"/>
+
+    </RelativeLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="140dp"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:padding="2dp"
+        android:layout_marginLeft="10dp">
+        <TextView
+            android:id="@+id/expandedListItem"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+          />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="fill_parent"
+                android:text="Rs 200"/>
+            <TextView
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:text="500ml"
+                android:layout_marginLeft="5dp"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="30dip"
+            android:layout_height="30dip"
+            android:layout_marginTop="10dp"
+            android:onClick="AddToCarOnly"
+            android:layout_marginLeft="5dp"
+            android:src="@drawable/addcart1" />
+        <ImageView
+            android:id="@+id/SingleCart"
+            android:layout_width="50dip"
+            android:layout_height="40dip"
+            android:src="@drawable/addcart2"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+
+            />
+    </LinearLayout>
+
+</LinearLayout>
