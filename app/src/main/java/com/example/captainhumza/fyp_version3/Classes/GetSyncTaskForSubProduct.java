@@ -1,6 +1,8 @@
 package com.example.captainhumza.fyp_version3.Classes;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
+import android.renderscript.Sampler;
 import android.widget.Toast;
 
 import com.example.captainhumza.fyp_version3.Customer.Fragments.ExpandableListDirectory.ExpandableListDataPump;
@@ -23,19 +25,17 @@ import java.util.List;
  * Created by Captain Humza on 10/28/2017.
  */
 
-public class GetSyncTaskForSubProduct extends AsyncTask<String,Void,String>{
+public class GetSyncTaskForSubProduct extends AsyncTask<String,String,String>{
     ProductCategory val = null;
     ExpandableListDataPump expandableListDataPump;
-    public GetSyncTaskForSubProduct(ProductCategory _val ,ExpandableListDataPump _expandableListDataPump)
+    GetASyncTaskInterface mListner;
+    private final ProgressDialog dialog = new ProgressDialog(MainActivity.instance());
+    public GetSyncTaskForSubProduct(ProductCategory _val ,ExpandableListDataPump _expandableListDataPump , GetASyncTaskInterface _mListner)
     {
+        mListner = _mListner;
         expandableListDataPump = _expandableListDataPump;
         val = _val;
     }
-    /*public void SetValue(ProductCategory _val ,ExpandableListDataPump _expandableListDataPump)
-    {
-        expandableListDataPump = _expandableListDataPump;
-        val = _val;
-    }*/
     @Override
     protected String doInBackground(String... params) {
 
@@ -43,6 +43,7 @@ public class GetSyncTaskForSubProduct extends AsyncTask<String,Void,String>{
         URL url;
         HttpURLConnection urlConnection = null;
         try {
+
             url = new URL(params[0]);
 
             urlConnection = (HttpURLConnection) url.openConnection();
@@ -78,16 +79,17 @@ public class GetSyncTaskForSubProduct extends AsyncTask<String,Void,String>{
 
         super.onPostExecute(result);
         try {
-            //Toast.makeText(CustomerHomeTwoActivity.instance(),val,Toast.LENGTH_LONG).show();
             JSONArray st = new JSONArray(result);
             List<Products> basketball1 = new ArrayList<Products>();
             for (int i = 0; i < st.length(); i++) {
                 Products pc = new Products();
                 JSONObject str = st.getJSONObject(i);
-                pc.productName = str.getString("ProductName");
-                pc.productImage = str.getString("ProductImage");
-                pc.rate = str.getInt("ProductRate");
-                pc.unitOfMessurment = str.getInt("UnitofMeasurmentID");
+                pc.ProductId = str.getInt("ProductId");
+                pc.ProductName = str.getString("ProductName");
+                pc.ProductImage = str.getString("ProductImage");
+                pc.ProductRate = str.getInt("ProductRate");
+                pc.UnitDEscription = str.getString("UnitDEscription");
+                pc.Weight = str.getInt("Weight");
                 basketball1.add(pc);
             }
             expandableListDataPump.expandableListDetail.put(val,basketball1);
@@ -95,16 +97,26 @@ public class GetSyncTaskForSubProduct extends AsyncTask<String,Void,String>{
             Toast.makeText(MainActivity.instance(),e.getMessage(),Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-
-
-
+        dialog.hide();
+        mListner.UpdateAdapter();
 
     }
 
     @Override
-    protected void onPreExecute() {}
+    protected void onPreExecute()
+    {
+        dialog.show();
+    }
 
     @Override
-    protected void onProgressUpdate(Void... values) {}
+    protected void onProgressUpdate(String... values)
+    {
+
+    }
+    public interface GetASyncTaskInterface
+    {
+        void UpdateAdapter();
+    }
+
 
 }

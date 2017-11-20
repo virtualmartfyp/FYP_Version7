@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.captainhumza.fyp_version3.Classes.Products;
 import com.example.captainhumza.fyp_version3.Customer.Fragments.RecycleViewHolder.CartListViewHolder;
@@ -19,7 +20,7 @@ import java.util.List;
 
 public class CarListAdapter extends RecyclerView.Adapter<CartListViewHolder> {
     private List<Products> product;
-
+    int count = 0;
     public CarListAdapter(List<Products> product) {
         this.product = product;
     }
@@ -41,18 +42,30 @@ public class CarListAdapter extends RecyclerView.Adapter<CartListViewHolder> {
 
             @Override
             public void onClick(View v) {
-                int count = Integer.parseInt((String) itemViewHolder.cart_product_quantity_tv.getText()) + 1;
+                count = Integer.parseInt((String) itemViewHolder.cart_product_quantity_tv.getText()) + 1;
                 itemViewHolder.cart_product_quantity_tv.setText(count +"");
+                double totalPrice = Double.parseDouble((String) itemViewHolder.cartPrice.getText());
+                totalPrice = count * totalPrice;
+                model.totalPrice = totalPrice;
+                model.quantity = count;
+                itemViewHolder.totalPrice.setText(totalPrice +"");
+
             }
         });
         itemViewHolder.imageMinus.setOnClickListener(new View.OnClickListener(){
 
             @Override
             public void onClick(View v) {
-                int count = Integer.parseInt((String) itemViewHolder.cart_product_quantity_tv.getText());
+                count = Integer.parseInt((String) itemViewHolder.cart_product_quantity_tv.getText());
                 if(count > 1) {
                     count -= 1;
                     itemViewHolder.cart_product_quantity_tv.setText(count + "");
+                    double totalPrice = Double.parseDouble((String) itemViewHolder.totalPrice.getText());
+                    double Price = Double.parseDouble((String) itemViewHolder.cartPrice.getText());
+                    totalPrice = totalPrice - Price;
+                    model.totalPrice = totalPrice;
+                    model.quantity = count;
+                    itemViewHolder.totalPrice.setText(totalPrice +"");
                 }
 
             }

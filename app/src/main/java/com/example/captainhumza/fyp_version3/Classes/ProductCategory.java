@@ -30,7 +30,6 @@ public class ProductCategory {
     public String ProductSubImage ;
     public int ProductCategoryId;
     public  String CategoryDescription;
-    public Bitmap decodedByte;
     String test = "";
 
     //String showUrl = "http://192.168.10.8/FYP_Version1Entity/api/Product";

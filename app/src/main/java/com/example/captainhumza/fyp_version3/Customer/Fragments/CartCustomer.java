@@ -14,8 +14,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.captainhumza.fyp_version3.Classes.CartRequestWebServiceHandler;
+import com.example.captainhumza.fyp_version3.Classes.ConstantClass;
 import com.example.captainhumza.fyp_version3.Classes.ProductCategory;
 import com.example.captainhumza.fyp_version3.Classes.Products;
 import com.example.captainhumza.fyp_version3.Customer.Fragments.RecyclerViewDirectory.CarListAdapter;
@@ -30,10 +34,19 @@ import java.util.Locale;
 public class CartCustomer extends Fragment implements SearchView.OnQueryTextListener{
     private RecyclerView recyclerview;
     CarListAdapter adapter;
-    List<Products> productList;
+    private List<Products> productList;
     List<Products> filteredModelList;
-    public  CartCustomer(){}
-    public CartCustomer(List<Products> lsPorduct)
+    AllProductListFragmentCustomer allProductListFragmentCustomer;
+    CartInterfaceListner cartInterfaceListner;
+    public static int backButtonLock = 0;
+    public CartCustomer(List<Products> lsPorduct ,
+                        AllProductListFragmentCustomer allProductListFragmentCustomer , CartInterfaceListner cartInterfaceListner)
+    {
+        this.cartInterfaceListner = cartInterfaceListner;
+        this.allProductListFragmentCustomer = allProductListFragmentCustomer;
+        //productList = lsPorduct;
+    }
+    public void SetCartList(List<Products> lsPorduct )
     {
         productList = lsPorduct;
     }
@@ -51,6 +64,8 @@ public class CartCustomer extends Fragment implements SearchView.OnQueryTextList
         recyclerview = (RecyclerView) view.findViewById(R.id.recyclerview);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerview.setLayoutManager(layoutManager);
+
+
         return view;
     }
     @Override
@@ -60,6 +75,29 @@ public class CartCustomer extends Fragment implements SearchView.OnQueryTextList
 
         adapter = new CarListAdapter(productList);
         recyclerview.setAdapter(adapter);
+        TextView backText = (TextView)view.findViewById(R.id.backText);
+        backText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                backButtonLock = 1;
+                cartInterfaceListner.CartInteractionMethod(allProductListFragmentCustomer);
+            }
+        });
+        RelativeLayout relativeLayoutCancel = (RelativeLayout)view.findViewById(R.id.cancleOrder);
+        relativeLayoutCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        RelativeLayout relativeLayoutRequest = (RelativeLayout)view.findViewById(R.id.RequestOrder);
+        relativeLayoutRequest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Products p = new Products();
+               // p.MakeOrder(productList);
+                new CartRequestWebServiceHandler(productList , ConstantClass.RequestProduct).execute();
+            }
+        });
     }
 
     @Override
@@ -112,15 +150,15 @@ public class CartCustomer extends Fragment implements SearchView.OnQueryTextList
 
         filteredModelList = new ArrayList<>();
         for (Products model : models) {
-            final String text = model.productName.toLowerCase();
+            final String text = model.ProductName.toLowerCase();
             if (text.contains(query) ) {
                 filteredModelList.add(model);
             }
         }
         return filteredModelList;
     }
-    public interface OnFragmentInteractionListener {
+    public interface CartInterfaceListner {
         // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+        void CartInteractionMethod(AllProductListFragmentCustomer all);
     }
 }

@@ -18,12 +18,9 @@ import com.example.captainhumza.fyp_version3.app.AppController;
 
 public class CartListViewHolder extends RecyclerView.ViewHolder {
     public View view;
-    public TextView name_TextView;
-    public TextView iso_TextView;
+    public TextView name_TextView  , cart_product_quantity_tv , cartWeight , cartPrice  , totalPrice;
     public NetworkImageView producImageView;
-    public TextView cart_product_quantity_tv;
-    public ImageView imagePlus;
-    public ImageView imageMinus;
+    public ImageView imagePlus ,imageMinus;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
 
@@ -32,22 +29,28 @@ public class CartListViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         itemView.setClickable(true);
         view = itemView;
+
         cart_product_quantity_tv = (TextView)itemView.findViewById(R.id.cart_product_quantity_tv);
         imagePlus = (ImageView) itemView.findViewById(R.id.cart_plus_img);
         imageMinus = (ImageView) itemView.findViewById(R.id.cart_minus_img);
         name_TextView = (TextView) itemView.findViewById(R.id.ListItemName);
-        iso_TextView = (TextView) itemView.findViewById(R.id.price);
         producImageView = (NetworkImageView) itemView.findViewById(R.id.thumbnailProduct);
+        cartWeight = (TextView)itemView.findViewById(R.id.weight);
+        cartPrice = (TextView)itemView.findViewById(R.id.price);
+        totalPrice = (TextView)itemView.findViewById(R.id.totalPrice);
 
     }
 
     public void bind(Products product) {
-        name_TextView.setText(product.productName);
-        iso_TextView.setText(product.rate+"");
+        name_TextView.setText(product.ProductName);
+        cartPrice.setText(product.ProductRate+"");
+        cartWeight.setText(product.Weight + " " +product.UnitDEscription);
+        totalPrice.setText(product.totalPrice+"");
+        cart_product_quantity_tv.setText(product.quantity+"");
 
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
-        producImageView.setImageUrl(ConstantClass.productImagePath+product.productImage,imageLoader);
+        producImageView.setImageUrl(ConstantClass.productImagePath+product.ProductImage,imageLoader);
 
     }
 }

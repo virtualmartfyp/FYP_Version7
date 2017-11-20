@@ -1,0 +1,124 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="100">
+        <RelativeLayout
+            android:id="@+id/profile_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="60"
+
+
+            android:background="@color/Light_Blue"
+            android:elevation="4dp"
+            android:paddingBottom="24dp">
+            <ImageButton
+                android:id="@+id/user_profile_photo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/circular_border_image_view"
+                android:elevation="5dp"
+                android:padding="20dp"
+                android:layout_marginTop="15dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/profilepic" />
+
+
+            <ImageView
+                android:id="@+id/add_friend"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_toLeftOf="@+id/drop_down_option_menu" />
+
+            <ImageView
+                android:id="@+id/drop_down_option_menu"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="16dp"
+                />
+
+            <TextView
+                android:id="@+id/user_profile_name"
+                android:layout_width="10dp"
+                android:layout_height="10dp"
+                android:layout_marginTop="73dp"
+                android:text="Abdul Rehman"
+                android:textColor="#fff"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:layout_below="@+id/add_friend"
+                android:layout_centerHorizontal="true"
+
+                />
+
+            <TextView
+                android:id="@+id/user_profile_short_bio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/user_profile_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="Virtual Mart User Profile"
+                android:textColor="#fff"
+                android:textSize="14sp"
+                />
+        </RelativeLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_below="@+id/profile_layout"
+            android:layout_marginTop="5dp"
+            android:layout_weight="60"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/contct"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:padding="20dp"
+                />
+
+            <EditText
+                android:id="@+id/user"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:layout_marginBottom="3dp"
+                android:layout_marginTop="3dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:padding="20dp"
+                />
+
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="#fff"
+                android:clickable="true"
+                android:elevation="4dp"
+                android:padding="20dp"
+                />
+
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

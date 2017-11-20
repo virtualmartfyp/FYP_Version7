@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import com.android.volley.toolbox.NetworkImageView;
 import com.example.captainhumza.fyp_version3.Classes.ConstantClass;
 import com.example.captainhumza.fyp_version3.Classes.ProductCategory;
 import com.example.captainhumza.fyp_version3.Classes.Products;
+import com.example.captainhumza.fyp_version3.DataBase.DataBaseHandler;
 import com.example.captainhumza.fyp_version3.MainActivity;
 import com.example.captainhumza.fyp_version3.app.AppController;
 import com.example.captainhumza.fyp_version3.R;
@@ -32,15 +34,23 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     private List<ProductCategory> productCategories;
     private HashMap<ProductCategory, List<Products>> expandableListDetail;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-    public List<Products> cartList = new ArrayList<Products>();
+    public List<Products> cartList = new ArrayList<Products>();;
     public OnImageClickListener mListener;
-    int counter = 0;
+    public static int counter = 0;
 
     public CustomExpandableListAdapter(Context context, List<ProductCategory> expandableListTitle,
                                        HashMap<ProductCategory, List<Products>> expandableListDetail) {
         this.context = context;
         this.productCategories = expandableListTitle;
         this.expandableListDetail = expandableListDetail;
+        try
+        {
+            TextView xxh = (TextView)MainActivity.instance().findViewById(R.id.actionbar_notifcation_textview);
+            xxh.setText(counter+"");
+        }catch (Exception ex)
+        {
+            Toast.makeText(MainActivity.instance(), ex.getMessage()+"customerAdapter Constructor", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -58,8 +68,12 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final View v = convertView;
-        final String expandedListText = getChild(listPosition, expandedListPosition).productName;
-        final String expandableImage = getChild(listPosition, expandedListPosition).productImage;
+        final int expandedId = getChild(listPosition, expandedListPosition).ProductId;
+        final String expandedListText = getChild(listPosition, expandedListPosition).ProductName;
+        final String expandableImage = getChild(listPosition, expandedListPosition).ProductImage;
+        final int expandableWeight = getChild(listPosition, expandedListPosition).Weight;
+        final double expandablePrice = getChild(listPosition, expandedListPosition).ProductRate;
+        final String expandableUnit = getChild(listPosition, expandedListPosition).UnitDEscription;
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -72,9 +86,16 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
             im.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
                     Products product = new Products();
-                    product.productName = expandedListText;
-                    product.productImage = expandableImage;
+                    product.ProductId = expandedId;
+                    product.ProductName = expandedListText;
+                    product.ProductImage = expandableImage;
+                    product.ProductRate = expandablePrice;
+                    product.Weight = expandableWeight;
+                    product.UnitDEscription = expandableUnit;
+                    product.totalPrice = expandablePrice;
+                    product.quantity = 1;
 
                     cartList.add(product);
                     if(cartList.size()> 0) {
@@ -82,7 +103,6 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
                         counter++;
                         tex.setText( counter+"");
                     }
-                    //Toast.makeText(context, "yahoooo", Toast.LENGTH_SHORT).show();
                 }
 
             });
@@ -99,6 +119,10 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
         TextView expandedListTextView = (TextView) convertView
                 .findViewById(R.id.expandedListItem);
         expandedListTextView.setText(expandedListText);
+        TextView priceText = (TextView) convertView.findViewById(R.id.ProductPrice);
+        priceText.setText(expandablePrice+"");
+        TextView weightText = (TextView) convertView.findViewById(R.id.ProductWeight);
+        weightText.setText(expandableWeight +" "+ expandableUnit);
         return convertView;
     }
 
@@ -142,77 +166,38 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     public View getGroupView(final int listPosition, boolean isExpanded,
                              View convertView, ViewGroup parent) {
       //  final String listTitle = (String) getGroup(listPosition);
-        ProductCategory listObject = (ProductCategory) getGroup(listPosition);
+
+        final ProductCategory listObject = (ProductCategory) getGroup(listPosition);
         if (convertView == null) {
             LayoutInflater layoutInflater = (LayoutInflater) this.context.
                     getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = layoutInflater.inflate(R.layout.list_group, null);
         }
+        ProgressBar progressBar = (ProgressBar)convertView.findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.INVISIBLE);
+
         final String path = productCategories.get(GetImageIndex(listObject.ProductSubCat)).ProductSubImage;
-        //int lsPosition = hashKey.size();
+        final ImageView imgStar = (ImageView)convertView.findViewById(R.id.starId);
+        imgStar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imgStar.setImageResource(R.drawable.colored_star);
+                //DataBaseHandler dt = new DataBaseHandler(MainActivity.instance());
 
-  //     if(hashKey.containsKey(listTitle) == false)
-    //    {
-            //Picasso.Builder builder = new Picasso.Builder(context);
-           // builder.listener(new Picasso.Listener()
-            //{
-              //  @Override
-                //public void onImageLoadFailed(Picasso picasso, Uri uri, Exception exception) {
+                /*boolean res = dt.insertData(listObject);
 
-                  //  Toast.makeText(context,exception.getMessage()+"here path __"+path,Toast.LENGTH_SHORT).show();
-                    //exception.printStackTrace();
-                //}
+                if (res == true) {
+                    Toast.makeText(MainActivity.instance(), "data is inserted", Toast.LENGTH_LONG).show();
+                }else
+                    Toast.makeText(MainActivity.instance(),"not inserted",Toast.LENGTH_LONG).show();*/
 
-//            });*//*
-            //final Bitmap[] temp = {null};
-  //           Target mTarget;
-    //        mTarget = new Target() {
-      //          @Override
-        //        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-          //          hashKey.put(listTitle , bitmap);
-            //        imageView.setImageBitmap(hashKey.get(listTitle));
-                    //imageViews.add(bitmap);
-                    //temp[0] = bitmap;
-              //  }
-
-                //@Override
-                //public void onBitmapFailed(Drawable errorDrawable) {
-
-                //}
-
-                //@Override
-               // public void onPrepareLoad(Drawable placeHolderDrawable) {
-
-                //}
-            //};
-            //builder.build().load("http://192.168.10.11/"+path).into(mTarget);
-            //Picasso.with(context).load("http://192.168.10.13/"+path).into(mTarget);
-            //imageView.setImageBitmap(temp[0]);
-            //Picasso.with(convertView.getContext()).load("http://192.168.10.10/"+path).error(R.id.listTitle).into(imageView);
-            //imageView.buildDrawingCache();
-            //Bitmap bmap = imageView.getDrawingCache();
-            //imageViews.add(bmap);
-            //imageViews.add(imageView.setImage);
-        //}
-       // imageView.setImageBitmap(hashKey.get(listTitle));*/
+            }
+        });
         if (imageLoader == null)
             imageLoader = AppController.getInstance().getImageLoader();
         NetworkImageView thumbNail = (NetworkImageView) convertView.findViewById(R.id.thumbnail);
         thumbNail.setImageUrl(ConstantClass.productImagePath+path,imageLoader);
-        //imageViews.
-        //if(imageViews.size() > listPosition)
-        //{
-
-            //imageView.setImageBitmap(imageViews.get(listPosition));
-        //}
-        //imageView.setImageBitmap(imageViews.get(listPosition));
-        //if(imageViews.get(listPosition) != null)
-        //{
-
-            //imageView.se
-            //imageView = imageViews.get(listPosition);
-        //}
-        //imageView.setImageBitmap(ExpandableListDataPump.productCategories.get(GetImageIndex(listTitle)).decodedByte);categoryText
+        //progressBar.setVisibility(View.INVISIBLE);
         TextView listTitleTextView = (TextView) convertView
                 .findViewById(R.id.listTitle);
 
@@ -235,7 +220,7 @@ public class CustomExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     public void setFilter(List<ProductCategory> abc){
-        productCategories = new ArrayList<>();
+        //productCategories = new ArrayList<>();
         productCategories.addAll(abc);
         notifyDataSetChanged();
     }

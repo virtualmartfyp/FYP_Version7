@@ -7,17 +7,20 @@
             android:icon="@drawable/ic_home_black_24dp"
             android:title="Home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_oders"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
+            android:title="Marts" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_profile"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
+            android:title="Profile" />
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:title="Genral Order" />
+        <item
+            android:id="@+id/logOut"
+            android:title="LogOut" />
     </group>
 
     <item android:title="Communicate">

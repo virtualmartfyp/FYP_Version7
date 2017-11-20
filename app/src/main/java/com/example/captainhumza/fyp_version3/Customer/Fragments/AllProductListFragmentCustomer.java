@@ -16,14 +16,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.captainhumza.fyp_version3.Classes.ConstantClass;
 import com.example.captainhumza.fyp_version3.Classes.GetSync;
+import com.example.captainhumza.fyp_version3.Classes.GetSyncTaskForSubProduct;
 import com.example.captainhumza.fyp_version3.Classes.ProductCategory;
 import com.example.captainhumza.fyp_version3.Classes.Products;
 import com.example.captainhumza.fyp_version3.Customer.Fragments.ExpandableListDirectory.CustomExpandableListAdapter;
 import com.example.captainhumza.fyp_version3.Customer.Fragments.ExpandableListDirectory.ExpandableListDataPump;
+import com.example.captainhumza.fyp_version3.DataBase.DataBaseHandler;
 import com.example.captainhumza.fyp_version3.MainActivity;
 import com.example.captainhumza.fyp_version3.R;
 
@@ -39,18 +43,23 @@ import java.util.List;
  * Use the  factory method to
  * create an instance of this fragment.
  */
-public class AllProductListFragmentCustomer extends Fragment implements SearchView.OnQueryTextListener{
+public class AllProductListFragmentCustomer extends Fragment implements SearchView.OnQueryTextListener ,
+        GetSyncTaskForSubProduct.GetASyncTaskInterface , GetSync.GetASyncTaskTitleInterface {
 
     private final ProgressDialog dialog = new ProgressDialog(MainActivity.instance());
     ExpandableListView expandableListView;
     CustomExpandableListAdapter expandableListAdapter;
+
     List<ProductCategory> expandableListTitle;
     HashMap<ProductCategory, List<Products>> expandableListDetail;
     List<ProductCategory> filteredModelList;
     ExpandableListDataPump expandableListDataPump = new ExpandableListDataPump();
+    public static AllProductListFragmentCustomer inst;
+    CartCustomer cartCustomer = null;
     int lock = 0;
 
     private OnFragmentAllProductInteractionListener mListener;
+    public static AllProductListFragmentCustomer instance(){return inst;}
     public AllProductListFragmentCustomer(OnFragmentAllProductInteractionListener _mListner)
     {
         mListener = _mListner;
@@ -59,7 +68,9 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getActivity().setTitle("Mart");
-        new GetSync(expandableListDataPump).execute(ConstantClass.subProduct,null,null);
+        inst = this;
+        new GetSync(expandableListDataPump, this).execute(ConstantClass.subProduct, null, null);
+
 
     }
 
@@ -73,18 +84,7 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
 
 
         expandableListView = (ExpandableListView) view.findViewById(R.id.expandableListView);
-        expandableListDetail = expandableListDataPump.getData();
-        expandableListTitle = new ArrayList<ProductCategory>(expandableListDetail.keySet());
-       try
-       {
-           expandableListAdapter = new CustomExpandableListAdapter(view.getContext(), expandableListTitle, expandableListDetail);
-       }
-       catch (Exception ex)
-       {
-           Toast.makeText(MainActivity.instance(), ex.getMessage()+"exception", Toast.LENGTH_SHORT).show();
-       }
 
-        expandableListView.setAdapter(expandableListAdapter);
         expandableListView.setOnGroupExpandListener(new ExpandableListView.OnGroupExpandListener() {
 
             @Override
@@ -93,12 +93,14 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
                try
                {
                    if(lock == 0) {
-                       mListener.onFragmentAllProductMethodInteraction(expandableListTitle.get(groupPosition) ,  expandableListDataPump);
-                       expandableListAdapter.notifyDataSetChanged();
+
+                       new GetSyncTaskForSubProduct(expandableListTitle.get(groupPosition) , expandableListDataPump
+                               , AllProductListFragmentCustomer.instance()).execute(ConstantClass.Product+expandableListTitle.get(groupPosition).ProductSubCatId,null,null);
+
                    }else if(lock == 1)
                    {
-                       mListener.onFragmentAllProductMethodInteraction(filteredModelList.get(groupPosition) , expandableListDataPump);
-                       expandableListAdapter.notifyDataSetChanged();
+                       new GetSyncTaskForSubProduct(filteredModelList.get(groupPosition) , expandableListDataPump
+                               ,  AllProductListFragmentCustomer.instance()).execute(ConstantClass.Product+filteredModelList.get(groupPosition).ProductSubCatId,null,null);
                    }
                }
                catch (Exception ex)
@@ -113,9 +115,6 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
 
             @Override
             public void onGroupCollapse(int groupPosition) {
-
-                //Toast.makeText(view.getContext(), expandableListTitle.get(groupPosition) + " List Collapsed.",Toast.LENGTH_SHORT).show();
-
             }
         });
 
@@ -130,7 +129,7 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
                                 + " -> "
                                 + expandableListDetail.get(
                                 expandableListTitle.get(groupPosition)).get(
-                                childPosition).productName+" __expandable child", Toast.LENGTH_SHORT
+                                childPosition).ProductName+" __expandable child", Toast.LENGTH_SHORT
                 ).show();
                 return false;
             }
@@ -143,7 +142,6 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setHasOptionsMenu(true);
-
     }
 
 
@@ -159,18 +157,14 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
                     @Override
                     public boolean onMenuItemActionCollapse(MenuItem item) {
                         lock = 0;
-                        expandableListAdapter.setFilter(expandableListTitle);
+                        //expandableListAdapter.setFilter(expandableListTitle);
                         return true;
                     }
 
                     @Override
                     public boolean onMenuItemActionExpand(MenuItem item) {
-                        expandableListDetail = expandableListDataPump.getData();
-                        expandableListTitle = new ArrayList<ProductCategory>(expandableListDetail.keySet());
-                        expandableListAdapter = new CustomExpandableListAdapter(MainActivity.instance(), expandableListTitle, expandableListDetail);
-                        expandableListView.setAdapter(expandableListAdapter);
+
                         lock = 1;
-                        Toast.makeText(MainActivity.instance(), item.toString()+"item click", Toast.LENGTH_SHORT).show();
                         return true;
                     }
                 });
@@ -180,17 +174,15 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
         cartIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                try
+                if(cartCustomer == null)
                 {
-                    mListener.onFragmentAllProductToCart(expandableListAdapter.cartList);
-                    Toast.makeText(MainActivity.instance(),expandableListAdapter.cartList.size()+"",Toast.LENGTH_SHORT).show();
-                }catch (Exception ex )
-                {
-                    Toast.makeText(MainActivity.instance(), ex.getMessage(), Toast.LENGTH_SHORT).show();
-                }
-                //  Intent i = new Intent(v.getContext(), MapsActivity.class);
-                //startActivity(i);
+                    cartCustomer = new CartCustomer(expandableListAdapter.cartList ,AllProductListFragmentCustomer.instance(),MainActivity.instance());
+                    cartCustomer.SetCartList(expandableListAdapter.cartList);
+                }else
+                    {
+                        cartCustomer.SetCartList(expandableListAdapter.cartList);
+                    }
+                mListener.onFragmentAllProductToCart(cartCustomer);
             }
         });
     }
@@ -221,9 +213,29 @@ public class AllProductListFragmentCustomer extends Fragment implements SearchVi
         }
         return filteredModelList;
     }
+
+    @Override
+    public void UpdateAdapter() {
+        expandableListAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void UpdateTiteleAdapter() {
+        if(expandableListAdapter == null)
+        {
+            expandableListDetail = expandableListDataPump.getData();
+            expandableListTitle = new ArrayList<ProductCategory>(expandableListDetail.keySet());
+            expandableListAdapter = new CustomExpandableListAdapter(MainActivity.instance(), expandableListTitle, expandableListDetail);
+            expandableListView.setAdapter(expandableListAdapter);
+        }else
+            {
+                expandableListView.setAdapter(expandableListAdapter);
+            }
+
+    }
+
     public interface OnFragmentAllProductInteractionListener {
         // TODO: Update argument type and name
-        void onFragmentAllProductMethodInteraction(ProductCategory uri , ExpandableListDataPump _expandableListDataPump);
-        void onFragmentAllProductToCart(List<Products> ls );
+        void onFragmentAllProductToCart(CartCustomer cartCustomer );
     }
 }

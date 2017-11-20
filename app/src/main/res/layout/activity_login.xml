@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:mastb="http://schemas.android.com/apk/res-auto"
+    xmlns:mstb="http://schemas.android.com/apk/res-auto"
     tools:context="com.example.captainhumza.fyp_version3.LoginActivity">
 
 
@@ -110,18 +112,23 @@
                         android:background="#fff"
                         android:password="true"
                         />
+
                 </RelativeLayout>
+
 
 
             </LinearLayout>
 
         </RelativeLayout>
 
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="10"
-            android:layout_marginBottom="10dp">
+           android:layout_marginTop="10dp"
+
+            >
 
             <RelativeLayout
                 android:id="@+id/login_login_btn"
@@ -149,6 +156,7 @@
             android:layout_weight="10">
 
             <TextView
+                android:id="@+id/forgotpass"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
@@ -159,6 +167,7 @@
                 />
 
         </RelativeLayout>
+
 
     </LinearLayout>
 

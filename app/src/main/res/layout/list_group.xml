@@ -12,7 +12,7 @@
        android:orientation="horizontal">
 
        <RelativeLayout
-           android:layout_width="80dp"
+           android:layout_width="70dp"
            android:layout_height="match_parent"
            android:layout_marginLeft="50dp">
            <com.android.volley.toolbox.NetworkImageView
@@ -29,6 +29,13 @@
                android:layout_height="55dp"
                android:layout_centerVertical="true"
                android:src="@drawable/rectangle"/>
+           <ProgressBar
+               android:id="@+id/progressBar"
+               android:layout_width="25dp"
+               android:layout_height="25dp"
+               style="@android:style/Widget.ProgressBar.Small"
+               android:layout_centerVertical="true"
+               android:layout_centerHorizontal="true" />
 
        </RelativeLayout>
 
@@ -71,6 +78,7 @@
                    android:layout_height="match_parent"
                    android:text="Fav"/>
                <ImageView
+                   android:id="@+id/starId"
                    android:layout_width="30dp"
                    android:layout_height="20dp"
                    android:src="@drawable/fav_star"/>
